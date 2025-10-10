@@ -1,14 +1,14 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Rifa Pesca & Camping</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel de Controle - Rifa Pesca & Camping 🎣</title>
 <style>
   :root {
     --verde: #1a593b;
-    --areia: #f3efe6;
     --verde-claro: #2f9e44;
+    --areia: #f3efe6;
     --vermelho: #b71c1c;
   }
 
@@ -20,167 +20,144 @@
     padding: 0;
   }
 
-  /* --- HEADER COM LOGO RESPONSIVA --- */
   header {
-    position: relative;
     background: var(--verde);
-    color: white;
-    padding: 22px 20px;
+    color: #fff;
     text-align: center;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-    overflow: visible;
-  }
-
-  header h1 {
-    margin: 0;
-    font-size: 1.8em;
-    line-height: 1.1;
-    font-weight: 600;
-  }
-
-  .logo {
-    position: absolute;
-    top: 10px;
-    left: 12px;
-    height: 64px;
-    width: auto;
-    max-width: 40%;
-    object-fit: contain;
-    display: block;
-
-    /* 🔹 Estilo aprimorado */
-    border-radius: 12px;                  /* bordas arredondadas */
-    border: 3px solid #fff;               /* borda branca elegante */
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25); /* sombra suave */
-  }
-
-
-  @media (max-width: 900px) {
-    .logo { height: 56px; max-width: 36%; }
-    header { padding: 18px 14px; }
-    header h1 { font-size: 1.5em; }
-  }
-
-  @media (max-width: 480px) {
-    .logo { height: 44px; max-width: 45%; top: 8px; left: 10px; }
-    header h1 { font-size: 1.2em; }
-    header div { font-size: 13px; }
+    padding: 20px;
   }
 
   main {
-    max-width: 800px;
-    margin: 20px auto;
-    background: white;
-    border-radius: 10px;
+    max-width: 1000px;
+    margin: 30px auto;
+    background: #fff;
+    border-radius: 12px;
     padding: 20px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
   }
 
-  .descricao {
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 10px;
-  }
-
-  form {
+  .resumo {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    justify-content: space-around;
+    text-align: center;
     margin-bottom: 20px;
   }
 
-  input {
-    flex: 1 1 45%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+  .card {
+    background: var(--verde);
+    color: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    min-width: 180px;
+    margin: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+
+  .card h3 {
+    margin: 0;
     font-size: 16px;
   }
 
+  .card p {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 5px 0 0;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+
+  th, td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+  }
+
+  th {
+    background: var(--verde);
+    color: #fff;
+  }
+
+  tr:nth-child(even) {
+    background: #f9f9f9;
+  }
+
   button {
-    flex: 1 1 100%;
     background: var(--verde-claro);
     border: none;
     color: white;
-    font-weight: 600;
-    padding: 12px;
+    padding: 10px 20px;
     border-radius: 8px;
     cursor: pointer;
-    transition: background 0.2s;
+    margin-top: 15px;
   }
 
   button:hover {
     background: #218838;
   }
 
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-    gap: 10px;
-  }
-
-  .numero {
-    background: #e0ece6;
-    padding: 12px 0;
-    border-radius: 8px;
-    text-align: center;
-    font-weight: bold;
+  .ordem-btn {
+    background: transparent;
+    color: #fff;
+    border: none;
     cursor: pointer;
-    transition: all 0.2s;
-    user-select: none;
-  }
-
-  .numero:hover {
-    transform: scale(1.05);
-    background: #d7f5e3;
-  }
-
-  .numero.ocupado {
-    background: var(--vermelho);
-    color: #fff;
-    cursor: not-allowed;
-    transform: none;
-  }
-
-  .numero.selecionado {
-    background: var(--verde-claro);
-    color: #fff;
-    transform: scale(1.05);
-  }
-
-  .footer {
-    text-align: center;
-    font-size: 13px;
-    color: #777;
-    margin-top: 20px;
-  }
-
-  @media (max-width: 600px) {
-    input {
-      flex: 1 1 100%;
-    }
+    font-size: 14px;
+    margin-left: 6px;
   }
 </style>
 </head>
 <body>
-
   <header>
-    <img src="logo.jpg" alt="Logo Ximac Pesca e Camping" class="logo">
-    <h1>🎣 Rifa Pesca & Camping</h1>
-    <div style="font-size:14px;opacity:0.9;">Escolha seus números da sorte!</div>
+    <h1>🎣 Painel de Controle - Rifa Pesca & Camping</h1>
   </header>
 
   <main>
-    <div class="descricao">Preencha seus dados, selecione quantos números quiser e confirme a reserva.</div>
+    <div class="resumo">
+      <div class="card">
+        <h3>Total de Números Vendidos</h3>
+        <p id="vendidos">0</p>
+      </div>
+      <div class="card">
+        <h3>Números Disponíveis</h3>
+        <p id="disponiveis">0</p>
+      </div>
+      <div class="card">
+        <h3>Participantes</h3>
+        <p id="participantes">0</p>
+      </div>
+    </div>
 
-    <form id="formRifa">
-      <input id="nome" placeholder="Seu nome" required />
-      <input id="whatsapp" placeholder="WhatsApp (ex: 62999999999)" required />
-      <button type="submit">Reservar números selecionados</button>
-    </form>
+    <input type="text" id="pesquisa" placeholder="Pesquisar por nome, número ou WhatsApp...">
 
-    <div class="grid" id="grid"></div>
-    <div class="footer">Atualiza automaticamente a cada 2 segundos.</div>
+    <table>
+      <thead>
+        <tr>
+          <th>
+            Número
+            <button class="ordem-btn" id="ordenar">⬇️</button>
+          </th>
+          <th>Nome</th>
+          <th>WhatsApp</th>
+          <th>Data</th>
+        </tr>
+      </thead>
+      <tbody id="tabela"></tbody>
+    </table>
+
+    <button id="baixar">⬇️ Baixar lista (CSV)</button>
   </main>
 
 <script>
@@ -188,59 +165,68 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzxK-9nl29lbEjStG7Wt
 const TOKEN = "Rf2024XimacPesca9381";
 const TOTAL_NUMEROS = 100;
 
-// 🔹 Lista local com status de pagamento
+// Guarda status de pagamento
 let listaPagamentos = [];
 
 async function carregarDados() {
-  const resp = await fetch(`${SCRIPT_URL}?token=${TOKEN}`);
-  const json = await resp.json();
-  if (!json.success) {
-    alert('Erro ao carregar dados!');
-    return;
-  }
+  try {
+    const resp = await fetch(`${SCRIPT_URL}?token=${TOKEN}`);
+    const json = await resp.json();
 
-  const data = json.data;
-  const tabela = document.getElementById("tabela");
-  tabela.innerHTML = "";
+    if (!json.success) {
+      alert("Erro ao carregar dados!");
+      return;
+    }
 
-  // Mantém status de quem já estava verde (pago)
-  const novos = [];
-  data.forEach(item => {
-    const pago = listaPagamentos.find(p => p.numero === item.numero)?.pago || false;
-    novos.push({ ...item, pago });
+    const data = json.data;
+    const tabela = document.getElementById("tabela");
+    tabela.innerHTML = "";
 
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${item.numero}</td>
-      <td>${item.nome}</td>
-      <td>${item.whatsapp}</td>
-      <td>${item.data ? item.data : "-"}</td>
-    `;
-    if (pago) tr.style.background = "#c8e6c9"; // verde claro
+    // Atualiza ou mantém status de pagamento
+    const novos = [];
+    data.forEach(item => {
+      const encontrado = listaPagamentos.find(p => p.numero === item.numero);
+      const pago = encontrado ? encontrado.pago : false;
 
-    // Clique para marcar/desmarcar pagamento
-    tr.addEventListener("click", () => {
-      tr.classList.toggle("pago");
-      if (tr.classList.contains("pago")) {
-        tr.style.background = "#c8e6c9"; // verde claro
-        atualizarStatus(item.numero, true);
-      } else {
-        tr.style.background = ""; // volta normal
-        atualizarStatus(item.numero, false);
-      }
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${item.numero}</td>
+        <td>${item.nome}</td>
+        <td>${item.whatsapp}</td>
+        <td>${item.data ? item.data : "-"}</td>
+      `;
+      if (pago) tr.style.backgroundColor = "#c8e6c9";
+
+      tr.addEventListener("click", () => {
+        const pagoAtual = !pago;
+        atualizarStatus(item.numero, pagoAtual);
+        tr.style.backgroundColor = pagoAtual ? "#c8e6c9" : "";
+      });
+
+      tabela.appendChild(tr);
+      novos.push({ ...item, pago });
     });
 
-    tabela.appendChild(tr);
-  });
+    listaPagamentos = novos;
 
-  listaPagamentos = novos;
+    // Atualiza resumo
+    document.getElementById("vendidos").textContent = data.length;
+    document.getElementById("disponiveis").textContent = TOTAL_NUMEROS - data.length;
+    document.getElementById("participantes").textContent = new Set(data.map(d => d.nome)).size;
 
-  // Atualiza resumo
-  document.getElementById("vendidos").textContent = data.length;
-  document.getElementById("disponiveis").textContent = TOTAL_NUMEROS - data.length;
-  document.getElementById("participantes").textContent = new Set(data.map(d => d.nome)).size;
+  } catch (e) {
+    console.error("Erro ao carregar dados:", e);
+  }
+}
 
-  // Pesquisa dinâmica
+// Atualiza status de pagamento localmente
+function atualizarStatus(numero, pago) {
+  const index = listaPagamentos.findIndex(p => p.numero === numero);
+  if (index >= 0) listaPagamentos[index].pago = pago;
+}
+
+// Pesquisa dinâmica
+document.addEventListener("DOMContentLoaded", () => {
   const pesquisa = document.getElementById("pesquisa");
   pesquisa.addEventListener("input", () => {
     const termo = pesquisa.value.toLowerCase();
@@ -250,10 +236,8 @@ async function carregarDados() {
     });
   });
 
-  // Exportar CSV com todos os números:
-  // - Pagos → nome + número
-  // - Não pagos → apenas número
-  document.getElementById("baixar").onclick = () => {
+  // Botão baixar lista CSV
+  document.getElementById("baixar").addEventListener("click", () => {
     let csv = "Número,Nome\n";
     listaPagamentos.forEach(item => {
       if (item.pago) {
@@ -262,23 +246,18 @@ async function carregarDados() {
         csv += `${item.numero},\n`;
       }
     });
+
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = "rifa_com_pagamentos.csv";
     link.click();
-  };
-}
+  });
 
-// 🔹 Atualiza status local (quem pagou)
-function atualizarStatus(numero, pago) {
-  const i = listaPagamentos.findIndex(p => p.numero === numero);
-  if (i >= 0) listaPagamentos[i].pago = pago;
-}
-
-// Atualiza automaticamente a cada 6 segundos
-carregarDados();
-setInterval(carregarDados, 6000);
+  // Carregar dados inicialmente e atualizar a cada 6s
+  carregarDados();
+  setInterval(carregarDados, 6000);
+});
 </script>
 </body>
 </html>
