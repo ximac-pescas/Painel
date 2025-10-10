@@ -1,172 +1,10 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Painel de Controle - Rifa Pesca & Camping 🎣</title>
-<style>
-  :root {
-    --verde: #1a593b;
-    --verde-claro: #2f9e44;
-    --areia: #f3efe6;
-    --vermelho: #b71c1c;
-  }
-
-  body {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background: var(--areia);
-    color: var(--verde);
-    margin: 0;
-    padding: 0;
-  }
-
-  header {
-    background: var(--verde);
-    color: #fff;
-    text-align: center;
-    padding: 20px;
-  }
-
-  main {
-    max-width: 1000px;
-    margin: 30px auto;
-    background: #fff;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-  }
-
-  .resumo {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-
-  .card {
-    background: var(--verde);
-    color: #fff;
-    border-radius: 10px;
-    padding: 15px;
-    min-width: 180px;
-    margin: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  }
-
-  .card h3 {
-    margin: 0;
-    font-size: 16px;
-  }
-
-  .card p {
-    font-size: 22px;
-    font-weight: bold;
-    margin: 5px 0 0;
-  }
-
-  input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-  }
-
-  th, td {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    text-align: center;
-  }
-
-  th {
-    background: var(--verde);
-    color: #fff;
-  }
-
-  tr:nth-child(even) {
-    background: #f9f9f9;
-  }
-
-  button {
-    background: var(--verde-claro);
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 15px;
-  }
-
-  button:hover {
-    background: #218838;
-  }
-
-  .ordem-btn {
-    background: transparent;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    margin-left: 6px;
-  }
-</style>
-</head>
-<body>
-  <header>
-    <h1>🎣 Painel de Controle - Rifa Pesca & Camping</h1>
-  </header>
-
-  <main>
-    <div class="resumo">
-      <div class="card">
-        <h3>Total de Números Vendidos</h3>
-        <p id="vendidos">0</p>
-      </div>
-      <div class="card">
-        <h3>Números Disponíveis</h3>
-        <p id="disponiveis">0</p>
-      </div>
-      <div class="card">
-        <h3>Participantes</h3>
-        <p id="participantes">0</p>
-      </div>
-    </div>
-
-    <input type="text" id="pesquisa" placeholder="Pesquisar por nome, número ou WhatsApp...">
-
-    <table>
-      <thead>
-        <tr>
-          <th>
-            Número
-            <button class="ordem-btn" id="ordenar">⬇️</button>
-          </th>
-          <th>Nome</th>
-          <th>WhatsApp</th>
-          <th>Data</th>
-        </tr>
-      </thead>
-      <tbody id="tabela"></tbody>
-    </table>
-
-    <button id="baixar">⬇️ Baixar lista (CSV)</button>
-  </main>
-
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzxK-9nl29lbEjStG7WtQCK2yHyn5k_IqnR3Jv6ZtemKY0SoFsnzFoTa4qiST6o1JwNig/exec";
 const TOKEN = "Rf2024XimacPesca9381";
 const TOTAL_NUMEROS = 100;
 
-let dadosAtuais = [];
-let ordemCrescente = true;
+// 🔹 Lista local com status de pagamento
+let listaPagamentos = [];
 
 async function carregarDados() {
   const resp = await fetch(`${SCRIPT_URL}?token=${TOKEN}`);
@@ -176,20 +14,16 @@ async function carregarDados() {
     return;
   }
 
-  dadosAtuais = json.data;
-  atualizarTabela();
-}
-
-function atualizarTabela() {
+  const data = json.data;
   const tabela = document.getElementById("tabela");
   tabela.innerHTML = "";
 
-  // Ordenar conforme estado atual
-  const dataOrdenada = [...dadosAtuais].sort((a, b) =>
-    ordemCrescente ? a.numero - b.numero : b.numero - a.numero
-  );
+  // Mantém status de quem já estava verde (pago)
+  const novos = [];
+  data.forEach(item => {
+    const pago = listaPagamentos.find(p => p.numero === item.numero)?.pago || false;
+    novos.push({ ...item, pago });
 
-  dataOrdenada.forEach(item => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${item.numero}</td>
@@ -197,43 +31,67 @@ function atualizarTabela() {
       <td>${item.whatsapp}</td>
       <td>${item.data ? item.data : "-"}</td>
     `;
+    if (pago) tr.style.background = "#c8e6c9"; // verde claro
+
+    // Clique para marcar/desmarcar pagamento
+    tr.addEventListener("click", () => {
+      tr.classList.toggle("pago");
+      if (tr.classList.contains("pago")) {
+        tr.style.background = "#c8e6c9"; // verde claro
+        atualizarStatus(item.numero, true);
+      } else {
+        tr.style.background = ""; // volta normal
+        atualizarStatus(item.numero, false);
+      }
+    });
+
     tabela.appendChild(tr);
   });
 
-  document.getElementById("vendidos").textContent = dadosAtuais.length;
-  document.getElementById("disponiveis").textContent = TOTAL_NUMEROS - dadosAtuais.length;
-  document.getElementById("participantes").textContent = new Set(dadosAtuais.map(d => d.nome)).size;
+  listaPagamentos = novos;
+
+  // Atualiza resumo
+  document.getElementById("vendidos").textContent = data.length;
+  document.getElementById("disponiveis").textContent = TOTAL_NUMEROS - data.length;
+  document.getElementById("participantes").textContent = new Set(data.map(d => d.nome)).size;
+
+  // Pesquisa dinâmica
+  const pesquisa = document.getElementById("pesquisa");
+  pesquisa.addEventListener("input", () => {
+    const termo = pesquisa.value.toLowerCase();
+    document.querySelectorAll("#tabela tr").forEach(tr => {
+      const texto = tr.textContent.toLowerCase();
+      tr.style.display = texto.includes(termo) ? "" : "none";
+    });
+  });
+
+  // Exportar CSV com todos os números:
+  // - Pagos → nome + número
+  // - Não pagos → apenas número
+  document.getElementById("baixar").onclick = () => {
+    let csv = "Número,Nome\n";
+    listaPagamentos.forEach(item => {
+      if (item.pago) {
+        csv += `${item.numero},${item.nome}\n`;
+      } else {
+        csv += `${item.numero},\n`;
+      }
+    });
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "rifa_com_pagamentos.csv";
+    link.click();
+  };
 }
 
-document.getElementById("ordenar").addEventListener("click", () => {
-  ordemCrescente = !ordemCrescente;
-  document.getElementById("ordenar").textContent = ordemCrescente ? "⬇️" : "⬆️";
-  atualizarTabela();
-});
-
-document.getElementById("pesquisa").addEventListener("input", () => {
-  const termo = document.getElementById("pesquisa").value.toLowerCase();
-  document.querySelectorAll("#tabela tr").forEach(tr => {
-    const texto = tr.textContent.toLowerCase();
-    tr.style.display = texto.includes(termo) ? "" : "none";
-  });
-});
-
-document.getElementById("baixar").onclick = () => {
-  let csv = "Número,Nome,WhatsApp,Data\n";
-  dadosAtuais.forEach(item => {
-    csv += `${item.numero},${item.nome},${item.whatsapp},${item.data || ""}\n`;
-  });
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "rifa_pesca_camping.csv";
-  link.click();
-};
+// 🔹 Atualiza status local (quem pagou)
+function atualizarStatus(numero, pago) {
+  const i = listaPagamentos.findIndex(p => p.numero === numero);
+  if (i >= 0) listaPagamentos[i].pago = pago;
+}
 
 // Atualiza automaticamente a cada 6 segundos
 carregarDados();
 setInterval(carregarDados, 6000);
 </script>
-</body>
-</html>
