@@ -1,3 +1,188 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Rifa Pesca & Camping</title>
+<style>
+  :root {
+    --verde: #1a593b;
+    --areia: #f3efe6;
+    --verde-claro: #2f9e44;
+    --vermelho: #b71c1c;
+  }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--areia);
+    color: var(--verde);
+    margin: 0;
+    padding: 0;
+  }
+
+  /* --- HEADER COM LOGO RESPONSIVA --- */
+  header {
+    position: relative;
+    background: var(--verde);
+    color: white;
+    padding: 22px 20px;
+    text-align: center;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    overflow: visible;
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: 1.8em;
+    line-height: 1.1;
+    font-weight: 600;
+  }
+
+  .logo {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    height: 64px;
+    width: auto;
+    max-width: 40%;
+    object-fit: contain;
+    display: block;
+
+    /* 🔹 Estilo aprimorado */
+    border-radius: 12px;                  /* bordas arredondadas */
+    border: 3px solid #fff;               /* borda branca elegante */
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25); /* sombra suave */
+  }
+
+
+  @media (max-width: 900px) {
+    .logo { height: 56px; max-width: 36%; }
+    header { padding: 18px 14px; }
+    header h1 { font-size: 1.5em; }
+  }
+
+  @media (max-width: 480px) {
+    .logo { height: 44px; max-width: 45%; top: 8px; left: 10px; }
+    header h1 { font-size: 1.2em; }
+    header div { font-size: 13px; }
+  }
+
+  main {
+    max-width: 800px;
+    margin: 20px auto;
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  }
+
+  .descricao {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+  }
+
+  form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  input {
+    flex: 1 1 45%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+  }
+
+  button {
+    flex: 1 1 100%;
+    background: var(--verde-claro);
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  button:hover {
+    background: #218838;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 10px;
+  }
+
+  .numero {
+    background: #e0ece6;
+    padding: 12px 0;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .numero:hover {
+    transform: scale(1.05);
+    background: #d7f5e3;
+  }
+
+  .numero.ocupado {
+    background: var(--vermelho);
+    color: #fff;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .numero.selecionado {
+    background: var(--verde-claro);
+    color: #fff;
+    transform: scale(1.05);
+  }
+
+  .footer {
+    text-align: center;
+    font-size: 13px;
+    color: #777;
+    margin-top: 20px;
+  }
+
+  @media (max-width: 600px) {
+    input {
+      flex: 1 1 100%;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <img src="logo.jpg" alt="Logo Ximac Pesca e Camping" class="logo">
+    <h1>🎣 Rifa Pesca & Camping</h1>
+    <div style="font-size:14px;opacity:0.9;">Escolha seus números da sorte!</div>
+  </header>
+
+  <main>
+    <div class="descricao">Preencha seus dados, selecione quantos números quiser e confirme a reserva.</div>
+
+    <form id="formRifa">
+      <input id="nome" placeholder="Seu nome" required />
+      <input id="whatsapp" placeholder="WhatsApp (ex: 62999999999)" required />
+      <button type="submit">Reservar números selecionados</button>
+    </form>
+
+    <div class="grid" id="grid"></div>
+    <div class="footer">Atualiza automaticamente a cada 2 segundos.</div>
+  </main>
+
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzxK-9nl29lbEjStG7WtQCK2yHyn5k_IqnR3Jv6ZtemKY0SoFsnzFoTa4qiST6o1JwNig/exec";
 const TOKEN = "Rf2024XimacPesca9381";
@@ -95,3 +280,5 @@ function atualizarStatus(numero, pago) {
 carregarDados();
 setInterval(carregarDados, 6000);
 </script>
+</body>
+</html>
