@@ -167,6 +167,7 @@ const TOTAL_NUMEROS = 100;
 
 // Guarda status de pagamento
 let listaPagamentos = [];
+let ordemCrescente = true; // controla a direção da ordenação
 
 async function carregarDados() {
   try {
@@ -209,14 +210,16 @@ async function carregarDados() {
 
     listaPagamentos = novos;
 
-    // Atualiza resumo
-    document.getElementById("vendidos").textContent = data.length;
-    document.getElementById("disponiveis").textContent = TOTAL_NUMEROS - data.length;
-    document.getElementById("participantes").textContent = new Set(data.map(d => d.nome)).size;
-
+    atualizarResumo(data);
   } catch (e) {
     console.error("Erro ao carregar dados:", e);
   }
+}
+
+function atualizarResumo(data) {
+  document.getElementById("vendidos").textContent = data.length;
+  document.getElementById("disponiveis").textContent = TOTAL_NUMEROS - data.length;
+  document.getElementById("participantes").textContent = new Set(data.map(d => d.nome)).size;
 }
 
 // Atualiza status de pagamento localmente
@@ -225,7 +228,26 @@ function atualizarStatus(numero, pago) {
   if (index >= 0) listaPagamentos[index].pago = pago;
 }
 
-// Pesquisa dinâmica
+// 🔹 Ordenar tabela por número
+function ordenarTabela() {
+  ordemCrescente = !ordemCrescente;
+  const btn = document.getElementById("ordenar");
+  btn.textContent = ordemCrescente ? "⬇️" : "⬆️";
+
+  const tabela = document.getElementById("tabela");
+  const linhas = Array.from(tabela.querySelectorAll("tr"));
+
+  linhas.sort((a, b) => {
+    const numA = parseInt(a.children[0].textContent.trim());
+    const numB = parseInt(b.children[0].textContent.trim());
+    return ordemCrescente ? numA - numB : numB - numA;
+  });
+
+  tabela.innerHTML = "";
+  linhas.forEach(linha => tabela.appendChild(linha));
+}
+
+// 🔹 Pesquisa dinâmica
 document.addEventListener("DOMContentLoaded", () => {
   const pesquisa = document.getElementById("pesquisa");
   pesquisa.addEventListener("input", () => {
@@ -236,7 +258,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Botão baixar lista CSV
+  // 🔹 Botão ordenar
+  document.getElementById("ordenar").addEventListener("click", ordenarTabela);
+
+  // 🔹 Botão baixar lista CSV
   document.getElementById("baixar").addEventListener("click", () => {
     let csv = "Número,Nome\n";
     listaPagamentos.forEach(item => {
@@ -261,3 +286,4 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
+
