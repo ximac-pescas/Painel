@@ -157,7 +157,7 @@
       <tbody id="tabela"></tbody>
     </table>
 
-    <button id="baixar">⬇️ Baixar lista (CSV)</button>
+    <button id="copiar">📋 Copiar lista (WhatsApp)</button>
   </main>
 
 <script>
@@ -261,22 +261,26 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🔹 Botão ordenar
   document.getElementById("ordenar").addEventListener("click", ordenarTabela);
 
-  // 🔹 Botão baixar lista CSV
-  document.getElementById("baixar").addEventListener("click", () => {
-    let csv = "Número,Nome\n";
-    listaPagamentos.forEach(item => {
-      if (item.pago) {
-        csv += `${item.numero},${item.nome}\n`;
-      } else {
-        csv += `${item.numero},\n`;
-      }
-    });
+  // 🔹 Botão copiar lista para WhatsApp
+  document.getElementById("copiar").addEventListener("click", () => {
+    let texto = "🎣 *Lista de Números - Rifa Pesca & Camping*\n\n";
 
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "rifa_com_pagamentos.csv";
-    link.click();
+    listaPagamentos
+      .sort((a, b) => a.numero - b.numero)
+      .forEach(item => {
+        if (item.pago) {
+          texto += `${String(item.numero).padStart(2, "0")} - ${item.nome}\n`;
+        } else {
+          texto += `${String(item.numero).padStart(2, "0")}\n`;
+        }
+      });
+
+    navigator.clipboard.writeText(texto)
+      .then(() => alert("✅ Lista copiada! Agora é só colar no grupo do WhatsApp."))
+      .catch(err => {
+        console.error("Erro ao copiar:", err);
+        alert("Erro ao copiar a lista. Tente novamente.");
+      });
   });
 
   // Carregar dados inicialmente e atualizar a cada 6s
@@ -286,4 +290,3 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
-
