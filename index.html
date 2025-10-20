@@ -165,9 +165,8 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzxK-9nl29lbEjStG7Wt
 const TOKEN = "Rf2024XimacPesca9381";
 const TOTAL_NUMEROS = 100;
 
-// Guarda status de pagamento
 let listaPagamentos = [];
-let ordemCrescente = true; // controla a direção da ordenação
+let ordemCrescente = true;
 
 async function carregarDados() {
   try {
@@ -183,7 +182,6 @@ async function carregarDados() {
     const tabela = document.getElementById("tabela");
     tabela.innerHTML = "";
 
-    // Atualiza ou mantém status de pagamento
     const novos = [];
     data.forEach(item => {
       const encontrado = listaPagamentos.find(p => p.numero === item.numero);
@@ -209,7 +207,6 @@ async function carregarDados() {
     });
 
     listaPagamentos = novos;
-
     atualizarResumo(data);
   } catch (e) {
     console.error("Erro ao carregar dados:", e);
@@ -222,13 +219,11 @@ function atualizarResumo(data) {
   document.getElementById("participantes").textContent = new Set(data.map(d => d.nome)).size;
 }
 
-// Atualiza status de pagamento localmente
 function atualizarStatus(numero, pago) {
   const index = listaPagamentos.findIndex(p => p.numero === numero);
   if (index >= 0) listaPagamentos[index].pago = pago;
 }
 
-// 🔹 Ordenar tabela por número
 function ordenarTabela() {
   ordemCrescente = !ordemCrescente;
   const btn = document.getElementById("ordenar");
@@ -247,7 +242,6 @@ function ordenarTabela() {
   linhas.forEach(linha => tabela.appendChild(linha));
 }
 
-// 🔹 Pesquisa dinâmica
 document.addEventListener("DOMContentLoaded", () => {
   const pesquisa = document.getElementById("pesquisa");
   pesquisa.addEventListener("input", () => {
@@ -258,21 +252,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // 🔹 Botão ordenar
   document.getElementById("ordenar").addEventListener("click", ordenarTabela);
 
-  // 🔹 Botão copiar lista para WhatsApp
+  // 🔹 NOVO BOTÃO COPIAR (mostra todos os nomes e números)
   document.getElementById("copiar").addEventListener("click", () => {
     let texto = "🎣 *Lista de Números - Rifa Pesca & Camping*\n\n";
 
     listaPagamentos
       .sort((a, b) => a.numero - b.numero)
       .forEach(item => {
-        if (item.pago) {
-          texto += `${String(item.numero).padStart(2, "0")} - ${item.nome}\n`;
-        } else {
-          texto += `${String(item.numero).padStart(2, "0")}\n`;
-        }
+        texto += `${String(item.numero).padStart(2, "0")} - ${item.nome}\n`;
       });
 
     navigator.clipboard.writeText(texto)
@@ -283,7 +272,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 
-  // Carregar dados inicialmente e atualizar a cada 6s
   carregarDados();
   setInterval(carregarDados, 6000);
 });
