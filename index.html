@@ -254,18 +254,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("ordenar").addEventListener("click", ordenarTabela);
 
-  // 🔹 NOVO BOTÃO COPIAR (mostra todos os nomes e números)
+  // 🔹 BOTÃO COPIAR LISTA ATUALIZADO
   document.getElementById("copiar").addEventListener("click", () => {
     let texto = "🎣 *Lista de Números - Rifa Pesca & Camping*\n\n";
 
-    listaPagamentos
-      .sort((a, b) => a.numero - b.numero)
-      .forEach(item => {
-        texto += `${String(item.numero).padStart(2, "0")} - ${item.nome}\n`;
-      });
+    for (let i = 1; i <= TOTAL_NUMEROS; i++) {
+      const item = listaPagamentos.find(x => x.numero === i);
+      if (item) {
+        texto += `${String(i).padStart(2, "0")} - ${item.nome}\n`;
+      } else {
+        texto += `${String(i).padStart(2, "0")}\n`;
+      }
+    }
 
     navigator.clipboard.writeText(texto)
-      .then(() => alert("✅ Lista copiada! Agora é só colar no grupo do WhatsApp."))
+      .then(() => alert("✅ Lista completa copiada!"))
       .catch(err => {
         console.error("Erro ao copiar:", err);
         alert("Erro ao copiar a lista. Tente novamente.");
